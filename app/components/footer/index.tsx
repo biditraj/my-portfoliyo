@@ -64,9 +64,14 @@ const Footer = () => {
     });
   };
 
+  // Center the links by shifting the starting position
+  const totalLinks = FOOTER_LINKS.length;
+  const spacing = isMobile ? 1.1 : 2;
+  const startX = -((totalLinks - 1) * spacing) / 2;
+
   return (
     <group position={[0, -44, 18]} rotation={[-Math.PI / 2, 0, 0]} ref={groupRef}>
-      <group position={[isMobile ? -2.5 : -4, 0, 0]}>
+      <group position={[startX, 0, 0]}>
         { getLinks() }
       </group>
     </group>

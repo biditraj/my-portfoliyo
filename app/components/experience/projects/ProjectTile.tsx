@@ -84,11 +84,12 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
 
   const handleClick = (e: ThreeEvent<MouseEvent>) => {
     e.stopPropagation();
-    if (!project.url) return;
+    const link = project.liveDemo || project.url;
+    if (!link) return;
     const button = e.eventObject;
     gsap.to(button.position, { z: 0, duration: 0.1 })
       .then(() => gsap.to(button.position, { z: 0.3, duration: 0.3 }));
-    setTimeout(() => window.open(project.url, '_blank'), 50);
+    setTimeout(() => window.open(link, '_blank'), 50);
   };
 
   return (
@@ -135,7 +136,7 @@ const ProjectTile = ({ project, index, position, rotation, activeId, onClick }: 
           fontSize={0.2}>
           {project.subtext}
         </Text>
-        {project.url && (
+        {(project.liveDemo || project.url) && (
           <group
             position={[1.3, -0.6, -1]}
             scale={[0, 0, 1]}

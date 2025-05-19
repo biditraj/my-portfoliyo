@@ -1,4 +1,4 @@
-# Bidit Raj
+# bidit-raj
 Crafting Digital Experiences with Precision
 
 ## Professional Journey

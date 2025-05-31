@@ -14,7 +14,7 @@ const vercettiFont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Bidit Raj ✌️",
+  title: "Bidit Raj",
   description: "Crafting Digital Experiences with Precision",
   keywords: "Bidit Raj, Frontend Engineer, React Developer, Three.js, Creative Developer, Web Development, Angular, JavaScript, TypeScript, Portfolio",
   authors: [{ name: "Bidit Raj" }],

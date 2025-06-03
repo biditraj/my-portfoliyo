@@ -9,11 +9,11 @@ export const FOOTER_LINKS: FooterLink[] = [
   {
     name: 'Instagram',
     icon: 'icons/instagram.svg',
-    url: 'https://www.instagram.com/shutup.bidit?igsh=MmRtajA4ZTR1ZnI=',
+    url: 'https://www.instagram.com/avg.developer/',
   },
   {
     name: 'Resume',
     icon: 'icons/file.svg',
-    url: './Bidit Raj - Resume.pdf',
+    url: '/bidit resume.pdf',
   }
 ];

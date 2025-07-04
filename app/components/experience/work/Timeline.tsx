@@ -9,14 +9,13 @@ import * as THREE from "three";
 import { WORK_TIMELINE } from "@constants";
 import { WorkTimelinePoint } from "@types";
 
-const reusableLeft = new THREE.Vector3(-0.3, 0, -0.1);
-const reusableRight = new THREE.Vector3(0.3, 0, -0.1);
-
 const TimelinePoint = ({ point, diff }: { point: WorkTimelinePoint, diff: number }) => {
   const getPoint = useMemo(() => {
+    // Adjust horizontal offset based on screen size and position
+    const horizontalOffset = isMobile ? 0.5 : 0.8;
     switch (point.position) {
-      case 'left': return reusableLeft;
-      case 'right': return reusableRight;
+      case 'left': return new THREE.Vector3(-horizontalOffset, 0, 0.1);
+      case 'right': return new THREE.Vector3(horizontalOffset, 0, 0.1);
       default: return new THREE.Vector3();
     }
   }, [point.position]);
@@ -27,35 +26,67 @@ const TimelinePoint = ({ point, diff }: { point: WorkTimelinePoint, diff: number
     font: "./Vercetti-Regular.woff",
     color: "white",
     anchorX: textAlign,
-    fillOpacity: 2 - 2 * diff,
+    fillOpacity: Math.max(0.3, 2 - 2 * diff),
   }), [textAlign, diff]);
 
   const titleProps = useMemo(() => ({
     ...textProps,
     font: "./soria-font.ttf",
-    fontSize: 0.6,
-    maxWidth: 3,
+    maxWidth: isMobile ? 2.5 : 4,
   }), [textProps]);
 
+  const subtitleProps = useMemo(() => ({
+    ...textProps,
+    maxWidth: isMobile ? 2.5 : 4,
+    anchorY: "top" as const,
+  }), [textProps]);
+
+  // Responsive scaling and spacing
+  const scale = isMobile ? 0.4 : 0.7;
+  const yearFontSize = isMobile ? 0.25 : 0.35;
+  const titleFontSize = isMobile ? 0.4 : 0.6;
+  const subtitleFontSize = isMobile ? 0.15 : 0.22;
+  
+  // Improved spacing between elements
+  const titleYOffset = isMobile ? -0.4 : -0.6;
+  const subtitleYOffset = isMobile ? -0.8 : -1.2;
+
   return (
-    <group position={point.point} scale={isMobile ? 0.35 : 0.6}>
+    <group position={point.point} scale={scale}>
       <Box args={[0.2, 0.2, 0.2]} position={[0, 0, -0.1]} scale={[1 - diff, 1 - diff, 1 - diff]}>
         <meshBasicMaterial color="white" wireframe />
         <Edges color="white" lineWidth={1.5} />
       </Box>
       <group>
         <group position={getPoint}>
-          <Text {...textProps} fontSize={0.3} position={[-diff / 2, 0, 0]}>
+          {/* Year */}
+          <Text 
+            {...textProps} 
+            fontSize={yearFontSize} 
+            position={[point.position === 'left' ? 0.1 : -0.1, 0.3, 0]}
+          >
             {point.year}
           </Text>
-          <group position={[0, -0.5, 0]}>
-            <Text {...titleProps} fontSize={0.6} maxWidth={3} position={[0, -diff / 2, 0]}>
-              {point.title}
-            </Text>
-            <Text {...textProps} fontSize={0.2} position={[0, -0.7 - diff, 0]} maxWidth={3} anchorY="top">
+          
+          {/* Title */}
+          <Text 
+            {...titleProps} 
+            fontSize={titleFontSize} 
+            position={[0, titleYOffset, 0]}
+          >
+            {point.title}
+          </Text>
+          
+          {/* Subtitle */}
+          {point.subtitle && (
+            <Text 
+              {...subtitleProps} 
+              fontSize={subtitleFontSize} 
+              position={[0, subtitleYOffset, 0]}
+            >
               {point.subtitle}
             </Text>
-          </group>
+          )}
         </group>
       </group>
     </group>
@@ -79,9 +110,11 @@ const Timeline = ({ progress }: { progress: number }) => {
   useFrame((_, delta) => {
     if (isActive) {
       const position = curve.getPoint(progress);
-      camera.position.x = THREE.MathUtils.damp(camera.position.x, (isMobile ? -1 : -2) + position.x, 4, delta);
-      camera.position.y = THREE.MathUtils.damp(camera.position.y, -39 + position.z, 4, delta);
-      camera.position.z = THREE.MathUtils.damp(camera.position.z, 13 - position.y, 4, delta);
+      // Improved camera positioning for better text visibility
+      const cameraOffset = isMobile ? { x: -0.5, y: -39.5, z: 12.5 } : { x: -1.5, y: -39, z: 13 };
+      camera.position.x = THREE.MathUtils.damp(camera.position.x, cameraOffset.x + position.x, 3, delta);
+      camera.position.y = THREE.MathUtils.damp(camera.position.y, cameraOffset.y + position.z, 3, delta);
+      camera.position.z = THREE.MathUtils.damp(camera.position.z, cameraOffset.z - position.y, 3, delta);
     }
   });
 

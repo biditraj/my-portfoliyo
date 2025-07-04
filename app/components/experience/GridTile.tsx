@@ -31,22 +31,23 @@ const GridTile = (props: GridTileProps) => {
   const data = useScroll();
 
   useEffect(() => {
-    // Hanlde the hover box and title animation for mobile.
+    // Handle the hover box and title animation for mobile.
     if (isMobile && titleRef.current) {
       const isWork = id === 'work';
       gsap.to(titleRef.current, {
-        fontSize: 0.13,
-        maxWidth: 4,
+        fontSize: 0.15,
+        maxWidth: 5,
         color: isWork ? '#FFF' : '#888',
-        letterSpacing: 0.4,
+        letterSpacing: 0.3,
       });
       gsap.to(titleRef.current.position, {
-        x: isWork ? 1: -1,
-        y: isWork ? -1.7 : 1.5,
+        x: isWork ? 0.8: -0.8,
+        y: isWork ? -1.5 : 1.3,
+        z: 0.2, // Bring text forward to avoid overlapping
         duration: 0.5,
       });
     }
-  }, []);
+  }, [id]);
 
   useFrame(() => {
     const d = data.range(0.95, 0.05);
@@ -129,10 +130,10 @@ const GridTile = (props: GridTileProps) => {
 
   const fontProps: Partial<TextProps> = {
     font: "./soria-font.ttf",
-    maxWidth: 2,
+    maxWidth: isMobile ? 3 : 2.5,
     anchorX: 'center',
     anchorY: 'bottom',
-    fontSize: 0.7,
+    fontSize: isMobile ? 0.5 : 0.7,
     color: 'white',
     textAlign: textAlign,
     fillOpacity: 0,
@@ -192,7 +193,7 @@ const GridTile = (props: GridTileProps) => {
           />
           <Edges color="white" lineWidth={3}/>
         </mesh>
-        <Text position={[0, -1.8, 0.4]} {...fontProps} ref={titleRef}>
+        <Text position={[0, isMobile ? -1.6 : -1.8, 0.5]} {...fontProps} ref={titleRef}>
           {title}
         </Text>
       </group>

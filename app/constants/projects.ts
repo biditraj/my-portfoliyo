@@ -3,6 +3,14 @@ import { Project } from "../types";
 // TODO: Move this to API
 export const PROJECTS: Project[] = [
   {
+    title: 'DormDeal',
+    date: '2024-2025',
+    subtext: 'DormDeal is a Java desktop app for campus users to buy, sell, and bid on items over a local network with MySQL backend support.',
+    url: 'https://github.com/biditraj/dormdeal-campus-market',
+    liveDemo: 'https://dormdeal.vercel.app/',
+    techStack: 'Java, MySQL, Desktop Application, Campus Marketplace',
+  },
+  {
     title: 'CeneSearch',
     date: '2024',
     subtext: 'A movie search web application that allows users to discover and explore films with a modern interface and comprehensive details.',
